@@ -1,7 +1,7 @@
 # sakura-cloud-controller-manager
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/sacloud/sakura-vip-agent)](https://goreportcard.com/report/github.com/sacloud/sakura-vip-agent)
-[![Build Status](https://travis-ci.org/sacloud/sakura-vip-agent.svg?branch=master)](https://travis-ci.org/sacloud/sakura-vip-agent)
+[![Go Report Card](https://goreportcard.com/badge/github.com/sacloud/sakura-cloud-controller-manager)](https://goreportcard.com/report/github.com/sacloud/sakura-cloud-controller-manager)
+[![Build Status](https://travis-ci.org/sacloud/sakura-cloud-controller-manager.svg?branch=master)](https://travis-ci.org/sacloud/sakura-cloud-controller-manager)
 
 `sakura-cloud-controller-manager` is the Kubernetes cloud controller manager implementation for the [SAKURA Cloud](https://cloud.sakura.ad.jp/).
 
