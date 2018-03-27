@@ -1,0 +1,83 @@
+# This is an example of how to setup cloud-controller-manger as a Daemonset in your cluster.
+# It assumes that your masters can run pods and has the role node-role.kubernetes.io/master
+# Note that this Daemonset will not work straight out of the box for your cloud, this is
+# meant to be a guideline.
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: cloud-controller-manager
+  namespace: kube-system
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: system:cloud-controller-manager
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: cloud-controller-manager
+  namespace: kube-system
+---
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  labels:
+    k8s-app: cloud-controller-manager
+  name: cloud-controller-manager
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      k8s-app: cloud-controller-manager
+  template:
+    metadata:
+      labels:
+        k8s-app: cloud-controller-manager
+    spec:
+      serviceAccountName: cloud-controller-manager
+      containers:
+      - name: cloud-controller-manager
+        image: sacloud/sakura-cloud-controller-manager:0.0.1
+        command:
+        - /usr/local/bin/sakura-cloud-controller-manager
+        - --cloud-provider=sakuracloud
+        - --cloud-config=/etc/kubernetes/cloud-config/sakuracloud.yaml
+        - --leader-elect=true
+        - --use-service-account-credentials=false
+        - --allocate-node-cidrs=false
+        - --configure-cloud-routes=false
+        - --allow-untagged-cloud
+        env:
+        - name: SAKURACLOUD_ACCESS_TOKEN
+          value: "<put-your-token-here>"
+        - name: SAKURACLOUD_ACCESS_TOKEN_SECRET
+          value: "<put-your-secret-here>"
+        - name: SAKURACLOUD_ZONE
+          value: "<put-your-default-zone-here>"
+        volumeMounts:
+        - mountPath: /etc/kubernetes/cloud-config
+          name: cloud-config
+          readOnly: true
+      tolerations:
+      # this is required so CCM can bootstrap itself
+      - key: node.cloudprovider.kubernetes.io/uninitialized
+        value: "true"
+        effect: NoSchedule
+      # this is to have the daemonset runnable on master nodes
+      # the taint may vary depending on your cluster setup
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+      # this is to restrict CCM to only run on master nodes
+      # the node selector may vary depending on your cluster setup
+      nodeSelector:
+        node-role.kubernetes.io/master: ""
+      volumes:
+      - hostPath:
+          path: /etc/kubernetes/cloud-config
+          type: DirectoryOrCreate
+        name: cloud-config
