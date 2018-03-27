@@ -1,0 +1,5 @@
+accessToken: "<put-your-token-here>"
+accessTokenSecret: "<put-your-secret-here>"
+zone: "<put-your-zone-here>"
+clusterID: "<put-your-cluster-id-here>"
+

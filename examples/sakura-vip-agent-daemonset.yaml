@@ -1,0 +1,61 @@
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: sakura-vip-agent
+  namespace: kube-system
+rules:
+- apiGroups: [""]
+  resources: ["services"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+  resources: ["events"]
+  verbs: ["create", "patch"]
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: sakura-vip-agent
+  namespace: kube-system
+
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: sakura-vip-agent
+  namespace: kube-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: sakura-vip-agent
+subjects:
+- kind: ServiceAccount
+  name: sakura-vip-agent
+  namespace: kube-system
+
+---
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  name: sakura-vip-agent
+  namespace: kube-system
+spec:
+  template:
+    metadata:
+      labels:
+        name: sakura-vip-agent
+    spec:
+      serviceAccountName: sakura-vip-agent
+      hostNetwork: true
+      containers:
+        - image: sacloud/sakura-vip-agent:0.0.1
+          name: sakura-vip-agent
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - mountPath: /dev
+              name: dev
+      volumes:
+        - name: dev
+          hostPath:
+            path: /dev
