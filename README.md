@@ -48,10 +48,20 @@ It is important that the node name on Kubernetes matches either the server name,
 
 All server names in kubernetes must be unique since node names in kubernetes must be unique.
 
-### All workers must connected to under [Switch+Router](https://manual.sakura.ad.jp/cloud/network/switch/about.html)(only when using LoadBalancer)
+## Requirements(only when using LoadBalancer)
 
-If you want to use service with `type: LoadBalancer`, all workers must connected to under Switch+Router.  
-And Switch+Router must be tagged with `@k8s` tag.
+If you want to use service with `type: LoadBalancer`, the following settings are required.
+
+- All workers must connected to under Switch+Router tagged with `@k8s` tag.
+- All workers must have kernel parameters enabled for DSR load balancing
+
+To set the kernel parameters for DSR load balancing, do as follows:
+
+    # add following lines to /etc/sysctl.conf
+    net.ipv4.conf.all.arp_ignore = 1
+    net.ipv4.conf.all.arp_announce = 2
+    # reload 
+    sysctl -p
 
 ## Deploy
 
