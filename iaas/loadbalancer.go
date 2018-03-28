@@ -120,7 +120,7 @@ func (c *client) CreateLoadBalancer(lbParam *LoadBalancerParam, vipParam *VIPPar
 		hc := &sacloud.LoadBalancerHealthCheck{
 			Protocol: vipParam.HealthCheck.Protocol,
 		}
-		if vipParam.HealthCheck.Protocol != "tcp" {
+		if vipParam.HealthCheck.Protocol == "http" || vipParam.HealthCheck.Protocol == "https" {
 			hc.Path = vipParam.HealthCheck.Path
 			hc.Status = fmt.Sprintf("%d", vipParam.HealthCheck.StatusCode)
 		}
@@ -179,7 +179,7 @@ func (c *client) UpdateLoadBalancer(lb *sacloud.LoadBalancer, vipParam *VIPParam
 		hc := &sacloud.LoadBalancerHealthCheck{
 			Protocol: vipParam.HealthCheck.Protocol,
 		}
-		if vipParam.HealthCheck.Protocol != "tcp" {
+		if vipParam.HealthCheck.Protocol == "http" || vipParam.HealthCheck.Protocol == "https" {
 			hc.Path = vipParam.HealthCheck.Path
 			hc.Status = fmt.Sprintf("%d", vipParam.HealthCheck.StatusCode)
 		}
