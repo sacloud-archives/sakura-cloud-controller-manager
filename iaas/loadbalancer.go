@@ -155,16 +155,25 @@ func (c *client) CreateLoadBalancer(lbParam *LoadBalancerParam, vipParam *VIPPar
 
 	once.Do(lock.Unlock)
 
-	err = client.LoadBalancer.SleepWhileCopying(lb.ID, client.DefaultTimeoutDuration, 20)
+	err = c.waitForLoadBalancerBoot(client, lb.ID)
 	if err != nil {
-		return nil, fmt.Errorf("Failed to wait SakuraCloud LoadBalancer copy: %s", err)
+		return nil, err
 	}
-	err = client.LoadBalancer.SleepUntilUp(lb.ID, client.DefaultTimeoutDuration)
+	_, err = client.LoadBalancer.Config(lb.ID)
 	if err != nil {
-		return nil, fmt.Errorf("Failed to wait SakuraCloud LoadBalancer boot: %s", err)
+		return nil, err
 	}
-
 	return []string{vip}, nil
+}
+
+func (c *client) waitForLoadBalancerBoot(client *api.Client, lbID int64) error {
+	if err := client.LoadBalancer.SleepWhileCopying(lbID, client.DefaultTimeoutDuration, 20); err != nil {
+		return fmt.Errorf("Failed to wait SakuraCloud LoadBalancer copy: %s", err)
+	}
+	if err := client.LoadBalancer.SleepUntilUp(lbID, client.DefaultTimeoutDuration); err != nil {
+		return fmt.Errorf("Failed to wait SakuraCloud LoadBalancer boot: %s", err)
+	}
+	return nil
 }
 
 func (c *client) UpdateLoadBalancer(lb *sacloud.LoadBalancer, vipParam *VIPParam) ([]string, error) {
