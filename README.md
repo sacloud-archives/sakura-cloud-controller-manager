@@ -69,7 +69,7 @@ There are two ways to run `sakura-cloud-controller-manager`
 
 ### Using `helm`
 
-[TODO add documents]
+To deploy by helm, see [sacloud/helm-charts/sakura-cloud-controller-mammager](https://github.com/sacloud/helm-charts/blob/master/sakura-cloud-controller-manager/README.md)
 
 ### Manually 
 
