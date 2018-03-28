@@ -30,21 +30,6 @@ const (
 	// Options are standard and premium. Defaults to standard
 	annLoadBalancerPlan = "k8s.usacloud.jp/load-balancer-plan"
 
-	// annHealthzProtocol is the annotation used to specify the protocol
-	// for health check to real nodes.
-	// Options are tcp, http and https. Defaults to tcp.
-	annHealthzProtocol = "k8s.usacloud.jp/load-balancer-healthz-protocol"
-
-	// annHealthzPath is the annotation used to specify the http/https request path
-	// for health check to real nodes.
-	// Defaults to "/". It is used when health check protocol is http/https only.
-	annHealthzPath = "k8s.usacloud.jp/load-balancer-healthz-path"
-
-	// annHealthzPath is the annotation used to specify the http/https request path
-	// for health check to real nodes.
-	// Defaults to 200. It is used when health check protocol is http/https only.
-	annHealthzStatus = "k8s.usacloud.jp/load-balancer-healthz-status"
-
 	// annHealthzInterval is the annotation used to specify check interval(sec)
 	// for health check to real nodes.
 	// Defaults to 10.
@@ -265,34 +250,13 @@ func (l *loadbalancers) buildVIPParams(service *v1.Service, nodes []*v1.Node) (*
 	}
 
 	healthCheck := &iaas.HealthCheck{
-		Protocol:   "tcp",
+		Protocol:   "ping",
 		Path:       "/",
 		StatusCode: 200,
 		DelayLoop:  10,
 	}
-	// collect health check spec from ann
 
-	if v, ok := service.Annotations[annHealthzProtocol]; ok {
-		switch v {
-		case "http":
-			healthCheck.Protocol = "http"
-		case "https":
-			healthCheck.Protocol = "https"
-		}
-	}
-	if v, ok := service.Annotations[annHealthzPath]; ok {
-		if v != "" {
-			healthCheck.Path = v
-		}
-	}
-	if v, ok := service.Annotations[annHealthzStatus]; ok {
-		if v != "" {
-			status, err := strconv.Atoi(v)
-			if err != nil {
-				healthCheck.StatusCode = int32(status)
-			}
-		}
-	}
+	// collect health check spec from annotations
 	if v, ok := service.Annotations[annHealthzInterval]; ok {
 		if v != "" {
 			status, err := strconv.Atoi(v)
