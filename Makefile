@@ -48,7 +48,10 @@ lint: fmt
 fmt:
 	gofmt -s -l -w $(GOFMT_FILES)
 
-.PHONY: bump-patch bump-minor bump-major
+.PHONY: version bump-patch bump-minor bump-major
+version:
+	gobump show -r version/
+
 bump-patch:
 	gobump patch -w version/
 
