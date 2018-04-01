@@ -15,7 +15,6 @@ type Config struct {
 	AccessToken       string `json:"accessToken" yaml:"accessToken" split_words:"true"`
 	AccessTokenSecret string `json:"accessTokenSecret" yaml:"accessTokenSecret" split_words:"true"`
 	Zone              string `json:"zone" yaml:"zone" split_words:"true"`
-	AcceptLanguage    string `json:"acceptLanguage" yaml:"acceptLanguage" split_words:"true"`
 	RetryMax          int    `json:"retryMax" yaml:"retryMax" split_words:"true"`
 	RetryIntervalSec  int    `json:"retryIntervalSec" yaml:"retryIntervalSec" split_words:"true"`
 	APIRootURL        string `json:"apiRootURL" yaml:"apiRootURL" split_words:"true"`

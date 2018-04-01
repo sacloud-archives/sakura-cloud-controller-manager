@@ -71,7 +71,7 @@ func (i *instances) InstanceType(name types.NodeName) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return server.ServerPlan.Name, nil
+	return strings.Replace(server.ServerPlan.ServiceClass, "/", "-", -1), nil
 }
 
 // InstanceTypeByProviderID returns the type of the specified instance.
@@ -85,7 +85,7 @@ func (i *instances) InstanceTypeByProviderID(providerID string) (string, error) 
 	if err != nil {
 		return "", err
 	}
-	return server.ServerPlan.Name, nil
+	return strings.Replace(server.ServerPlan.ServiceClass, "/", "-", -1), nil
 }
 
 // AddSSHKeyToAllInstances adds an SSH public key as a legal identity for all instances
