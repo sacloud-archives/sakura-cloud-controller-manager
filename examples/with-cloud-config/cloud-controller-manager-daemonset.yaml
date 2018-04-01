@@ -42,7 +42,7 @@ spec:
       serviceAccountName: cloud-controller-manager
       containers:
       - name: cloud-controller-manager
-        image: sacloud/sakura-cloud-controller-manager:0.0.1
+        image: sacloud/sakura-cloud-controller-manager:latest
         command:
         - /usr/local/bin/sakura-cloud-controller-manager
         - --cloud-provider=sakuracloud
