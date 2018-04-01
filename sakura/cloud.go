@@ -52,7 +52,7 @@ func newCloud(configReader io.Reader) (cloudprovider.Interface, error) {
 		AccessToken:       config.AccessToken,
 		AccessTokenSecret: config.AccessTokenSecret,
 		Zone:              config.Zone,
-		AcceptLanguage:    config.AccessToken,
+		AcceptLanguage:    "en", // must be "en", see https://github.com/sacloud/sakura-cloud-controller-manager/issues/4
 		RetryMax:          config.RetryMax,
 		RetryIntervalSec:  config.RetryIntervalSec,
 		APIRootURL:        config.APIRootURL,
