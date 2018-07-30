@@ -40,16 +40,13 @@ func (c *client) CreateLoadBalancer(lbParam *LoadBalancerParam, vipParam *VIPPar
 	var once sync.Once
 	defer once.Do(lock.Unlock)
 
-	// find router
 	client := c.getRawClient()
-	res, err := client.GetInternetAPI().Reset().WithTags(lbParam.RouterTags).Find()
+	sw, err := c.findLBConnectedSwitch(lbParam)
 	if err != nil {
 		return nil, err
 	}
-	router := res.Internet[0]
-	sw, err := client.Switch.Read(router.Switch.ID)
-	if err != nil {
-		return nil, err
+	if sw == nil {
+		return nil, fmt.Errorf("switch resource (with tag[%s]) is not found", lbParam.RouterTags)
 	}
 
 	var globalIPs = []*globalIPList{}
@@ -64,7 +61,7 @@ func (c *client) CreateLoadBalancer(lbParam *LoadBalancerParam, vipParam *VIPPar
 		addresses:      ips,
 		nwMaskLen:      sw.Subnets[0].NetworkMaskLen,
 	})
-	usedIPs, err := c.extractConsumedGlobalIPs(router.Switch.ID)
+	usedIPs, err := c.extractConsumedGlobalIPs(sw.ID)
 	if err != nil {
 		return nil, err
 	}
@@ -96,7 +93,7 @@ func (c *client) CreateLoadBalancer(lbParam *LoadBalancerParam, vipParam *VIPPar
 	}
 
 	p := &sacloud.CreateLoadBalancerValue{
-		SwitchID:     router.Switch.GetStrID(),
+		SwitchID:     sw.GetStrID(),
 		VRID:         1,
 		Plan:         sacloud.LoadBalancerPlanStandard,
 		IPAddress1:   lbIP1,
@@ -233,6 +230,34 @@ func (c *client) DeleteLoadBalancer(id int64) error {
 
 	_, err = client.LoadBalancer.Delete(id)
 	return err
+}
+
+func (c *client) findLBConnectedSwitch(lbParam *LoadBalancerParam) (*sacloud.Switch, error) {
+	client := c.getRawClient()
+
+	res, err := client.GetInternetAPI().Reset().WithTags(lbParam.RouterTags).Find()
+	if err != nil {
+		return nil, err
+	}
+	if len(res.Internet) > 0 {
+		router := res.Internet[0]
+		var sw *sacloud.Switch
+		sw, err = client.Switch.Read(router.Switch.ID)
+		if err != nil {
+			return nil, err
+		}
+		return sw, nil
+	}
+
+	res, err = client.GetSwitchAPI().Reset().WithTags(lbParam.RouterTags).Find()
+	if err != nil {
+		return nil, err
+	}
+	if len(res.Switches) > 0 {
+		return &res.Switches[0], nil
+	}
+
+	return nil, nil
 }
 
 func (c *client) extractConsumedGlobalIPs(routerSwitchID int64) ([]string, error) {
