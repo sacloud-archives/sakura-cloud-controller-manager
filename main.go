@@ -2,9 +2,12 @@ package main
 
 import (
 	"fmt"
-	"github.com/sacloud/sakura-cloud-controller-manager/version"
 	"os"
 
+	"github.com/golang/glog"
+	_ "github.com/sacloud/sakura-cloud-controller-manager/sakura"
+	"github.com/sacloud/sakura-cloud-controller-manager/version"
+	"github.com/spf13/pflag"
 	"k8s.io/apiserver/pkg/server/healthz"
 	"k8s.io/apiserver/pkg/util/flag"
 	"k8s.io/apiserver/pkg/util/logs"
@@ -13,10 +16,6 @@ import (
 	_ "k8s.io/kubernetes/pkg/client/metrics/prometheus" // for client metric registration
 	_ "k8s.io/kubernetes/pkg/version/prometheus"        // for version metric registration
 	"k8s.io/kubernetes/pkg/version/verflag"
-
-	"github.com/golang/glog"
-	_ "github.com/sacloud/sakura-cloud-controller-manager/sakura"
-	"github.com/spf13/pflag"
 )
 
 func init() {
@@ -24,7 +23,11 @@ func init() {
 }
 
 func main() {
-	s := options.NewCloudControllerManagerServer()
+	s, err := options.NewCloudControllerManagerOptions()
+	if err != nil {
+		glog.Fatalf("failed to create config options: %s", err)
+	}
+
 	s.AddFlags(pflag.CommandLine)
 
 	flag.InitFlags()
@@ -34,7 +37,12 @@ func main() {
 
 	verflag.PrintAndExitIfRequested()
 
-	if err := app.Run(s); err != nil {
+	config, err := s.Config()
+	if err != nil {
+		glog.Fatalf("failed to create component config: %s", err)
+	}
+
+	if err := app.Run(config.Complete()); err != nil {
 		fmt.Fprintf(os.Stderr, "%v\n", err) // nolint
 		os.Exit(1)
 	}
