@@ -20,10 +20,9 @@ clean:
 
 .PHONY: tools
 tools:
-	go get -u github.com/golang/dep/cmd/dep
-	go get -u github.com/motemen/gobump
-	go get -v github.com/alecthomas/gometalinter
-	gometalinter --install
+	GO111MODULE=off go get -u golang.org/x/tools/cmd/goimports
+	GO111MODULE=off go get -u github.com/motemen/gobump/cmd/gobump
+	GO111MODULE=off go get -u golang.org/x/lint/golint
 
 .PHONY: build
 build: bin/sakura-cloud-controller-manager
@@ -41,12 +40,14 @@ test: lint
 
 .PHONY: lint
 lint: fmt
-	gometalinter --vendor --skip=vendor/ --cyclo-over=20 --disable=gas --disable=maligned --deadline=2m ./...
-	@echo
+	go list ./... | xargs -L1 golint
 
 .PHONY: fmt
 fmt:
 	gofmt -s -l -w $(GOFMT_FILES)
+
+goimports:
+	goimports -w $(GOFMT_FILES)
 
 .PHONY: version bump-patch bump-minor bump-major
 version:
