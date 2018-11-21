@@ -4,14 +4,15 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/sacloud/libsacloud"
-	"github.com/sacloud/libsacloud/sacloud"
 	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"strings"
 	"time"
+
+	"github.com/sacloud/libsacloud"
+	"github.com/sacloud/libsacloud/sacloud"
 )
 
 var (
@@ -290,6 +291,7 @@ type API struct {
 	IPv6Net       *IPv6NetAPI       // IPv6ネットワークAPI
 	License       *LicenseAPI       // ライセンスAPI
 	LoadBalancer  *LoadBalancerAPI  // ロードバランサーAPI
+	MobileGateway *MobileGatewayAPI // モバイルゲートウェイAPI
 	NewsFeed      *NewsFeedAPI      // フィード(障害/メンテナンス情報)API
 	NFS           *NFSAPI           // NFS API
 	Note          *NoteAPI          // スタートアップスクリプトAPI
@@ -297,6 +299,7 @@ type API struct {
 	PrivateHost   *PrivateHostAPI   // 専有ホストAPI
 	Product       *ProductAPI       // 製品情報API
 	Server        *ServerAPI        // サーバーAPI
+	SIM           *SIMAPI           // SIM API
 	SimpleMonitor *SimpleMonitorAPI // シンプル監視API
 	SSHKey        *SSHKeyAPI        // 公開鍵API
 	Subnet        *SubnetAPI        // IPv4ネットワークAPI
@@ -405,6 +408,11 @@ func (api *API) GetLoadBalancerAPI() *LoadBalancerAPI {
 	return api.LoadBalancer
 }
 
+// GetMobileGatewayAPI モバイルゲートウェイAPI取得
+func (api *API) GetMobileGatewayAPI() *MobileGatewayAPI {
+	return api.MobileGateway
+}
+
 // GetNewsFeedAPI フィード(障害/メンテナンス情報)API取得
 func (api *API) GetNewsFeedAPI() *NewsFeedAPI {
 	return api.NewsFeed
@@ -458,6 +466,11 @@ func (api *API) GetPublicPriceAPI() *PublicPriceAPI {
 // GetServerAPI サーバーAPI取得
 func (api *API) GetServerAPI() *ServerAPI {
 	return api.Server
+}
+
+// GetSIMAPI SIM API取得
+func (api *API) GetSIMAPI() *SIMAPI {
+	return api.SIM
 }
 
 // GetSimpleMonitorAPI シンプル監視API取得
@@ -561,20 +574,21 @@ func newAPI(client *Client) *API {
 			Region: NewRegionAPI(client),
 			Zone:   NewZoneAPI(client),
 		},
-		GSLB:         NewGSLBAPI(client),
-		Icon:         NewIconAPI(client),
-		Interface:    NewInterfaceAPI(client),
-		Internet:     NewInternetAPI(client),
-		IPAddress:    NewIPAddressAPI(client),
-		IPv6Addr:     NewIPv6AddrAPI(client),
-		IPv6Net:      NewIPv6NetAPI(client),
-		License:      NewLicenseAPI(client),
-		LoadBalancer: NewLoadBalancerAPI(client),
-		NewsFeed:     NewNewsFeedAPI(client),
-		NFS:          NewNFSAPI(client),
-		Note:         NewNoteAPI(client),
-		PacketFilter: NewPacketFilterAPI(client),
-		PrivateHost:  NewPrivateHostAPI(client),
+		GSLB:          NewGSLBAPI(client),
+		Icon:          NewIconAPI(client),
+		Interface:     NewInterfaceAPI(client),
+		Internet:      NewInternetAPI(client),
+		IPAddress:     NewIPAddressAPI(client),
+		IPv6Addr:      NewIPv6AddrAPI(client),
+		IPv6Net:       NewIPv6NetAPI(client),
+		License:       NewLicenseAPI(client),
+		LoadBalancer:  NewLoadBalancerAPI(client),
+		MobileGateway: NewMobileGatewayAPI(client),
+		NewsFeed:      NewNewsFeedAPI(client),
+		NFS:           NewNFSAPI(client),
+		Note:          NewNoteAPI(client),
+		PacketFilter:  NewPacketFilterAPI(client),
+		PrivateHost:   NewPrivateHostAPI(client),
 		Product: &ProductAPI{
 			Server:      NewProductServerAPI(client),
 			License:     NewProductLicenseAPI(client),
@@ -584,6 +598,7 @@ func newAPI(client *Client) *API {
 			Price:       NewPublicPriceAPI(client),
 		},
 		Server:        NewServerAPI(client),
+		SIM:           NewSIMAPI(client),
 		SimpleMonitor: NewSimpleMonitorAPI(client),
 		SSHKey:        NewSSHKeyAPI(client),
 		Subnet:        NewSubnetAPI(client),
