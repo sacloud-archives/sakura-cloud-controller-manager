@@ -50,7 +50,6 @@ spec:
         - --use-service-account-credentials=false
         - --allocate-node-cidrs=false
         - --configure-cloud-routes=false
-        - --allow-untagged-cloud
         env:
         - name: SAKURACLOUD_ACCESS_TOKEN
           value: "<put-your-token-here>"
