@@ -1,2 +1,5 @@
 .env
 bin/
+e2e/.terraform
+e2e/terraform.*
+e2e/id_rsa
