@@ -5,7 +5,6 @@ import (
 	"io"
 
 	"github.com/sacloud/sakura-cloud-controller-manager/iaas"
-	clientset "k8s.io/client-go/kubernetes"
 	"k8s.io/kubernetes/pkg/cloudprovider"
 	"k8s.io/kubernetes/pkg/controller"
 )
@@ -25,8 +24,6 @@ const (
 	// TagsClusterID is tag name for mark ClusterID
 	TagsClusterID = TagsKubernetesResource + ".ClusterID"
 )
-
-var kubeClient clientset.Interface
 
 type cloud struct {
 	sacloudAPI iaas.Client
@@ -80,7 +77,6 @@ func init() {
 // Initialize provides the cloud with a kubernetes client builder and may spawn goroutines
 // to perform housekeeping activities within the cloud provider.
 func (c *cloud) Initialize(clientBuilder controller.ControllerClientBuilder) {
-	kubeClient = clientBuilder.ClientOrDie(ControllerName)
 }
 
 // LoadBalancer returns a balancer interface. Also returns true if the interface is supported, false otherwise.

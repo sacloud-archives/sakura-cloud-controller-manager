@@ -2,12 +2,13 @@ package sakura
 
 import (
 	"fmt"
+	"io"
+	"io/ioutil"
+
 	"github.com/ghodss/yaml"
 	"github.com/hashicorp/go-multierror"
 	"github.com/imdario/mergo"
 	"github.com/kelseyhightower/envconfig"
-	"io"
-	"io/ioutil"
 )
 
 // Config represents CCM configuration includes sacloud API client configuration

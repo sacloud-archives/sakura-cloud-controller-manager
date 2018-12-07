@@ -1,13 +1,12 @@
 sudo: required
 language: go
-go: 1.9.4
+go: "1.11"
 services:
 - docker
 install:
 - make tools
 script:
 - make test
-- make build
 notifications:
   slack:
     secure: F32go0CKSMy8F6s+MDDcj+iv58Kp3Qwx3vtTfxD1kfHQBzHbZgdIPo0HQ8wQY969ACnO1TDRxlPocKudAaEv8mBZcKZg8jun6kI3EZjTXbr6+KylZeIry/E0hzFS6S2bHO60wvqDUC3vomEN2HWydO784WYaaHGtbRJw26gKnB91gCbCFQxuHoXVyg/ZjkvQxL6lhxYN8yJjQ/TpL73NWZpnNpvaIImZR+OzFjs049Cpfwk4dh7O05gL+JJEP2TM9xD23kO14NHHDj3XtIuQkpWVvW3isrYXtJnIxTh5w38GzrAE7ZYZl0UpXvyS/McFvsZuYX6+27yy0uL2eahDGQ0JWP1UpRXFmAbvsqcjwx8cIuH0YbqkvRYJbGxRUB1ioon1qjlz7bHWN1smBldeUtAv2a+gxl+z4uXxwDASIkMJu+gbGijhm5v1DAiINxVD55zRBkLS+24cqWg0BWjVrMfYg5s9nfue7KM6UFRwuI/gFppJIjMcV2tFLHCBSVrosdrZTUdcxUe7VyZ/IUsQwMdNnnCvs0kko1j+ZePh0xBPHUzSZpo7byeqWRoVGKdSnlQOKuwyXZnZan8zUArJM13nfDSpHbsI8J1EvBo0smIR4A7Ldry1WQQ09HK84Nci2qpI/5h/lNPteQfHlhnRaA58ke+mcG5WrDekX+Xx6aw=
