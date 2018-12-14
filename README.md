@@ -7,8 +7,6 @@
 
 > [About Kubernetes cloud controller managers](https://kubernetes.io/docs/tasks/administer-cluster/running-cloud-controller/)
 
-**this project is a work in progress and may not be production ready.**
-
 ## Features
 
 #### NodeController
@@ -62,6 +60,14 @@ To set the kernel parameters for DSR load balancing, do as follows:
     net.ipv4.conf.all.arp_announce = 2
     # reload 
     sysctl -p
+
+## Compatibility for Kubernetes and CCM
+
+| Kubernetes | sakura-cloud-controller-manager | 
+| ------- | -------- |
+|  v1.9   |  v0.0.x  |
+|  v1.11  |  v0.1.x  |
+|  v1.12  |  v0.2.x  |
 
 ## Deploy
 
