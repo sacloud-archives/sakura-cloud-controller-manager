@@ -39,6 +39,8 @@ spec:
       labels:
         k8s-app: cloud-controller-manager
     spec:
+      dnsPolicy: Default
+      hostNetwork: true
       serviceAccountName: cloud-controller-manager
       containers:
       - name: cloud-controller-manager
@@ -67,6 +69,8 @@ spec:
       - key: node.cloudprovider.kubernetes.io/uninitialized
         value: "true"
         effect: NoSchedule
+      - key: "CriticalAddonsOnly"
+        operator: "Exists"
       # this is to have the daemonset runnable on master nodes
       # the taint may vary depending on your cluster setup
       - key: node-role.kubernetes.io/master
