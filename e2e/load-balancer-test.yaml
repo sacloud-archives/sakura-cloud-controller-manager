@@ -1,0 +1,44 @@
+# deployment
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    run: load-balancer-example
+  name: hello-world
+  namespace: default
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      run: load-balancer-example
+  template:
+    metadata:
+      labels:
+        run: load-balancer-example
+    spec:
+      containers:
+        - image: gcr.io/google-samples/node-hello:1.0
+          imagePullPolicy: IfNotPresent
+          name: hello-world
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          resources: {}
+      restartPolicy: Always
+---
+# service
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: load-balancer-example
+  name: hello-world
+  namespace: default
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    run: load-balancer-example
+  type: LoadBalancer
