@@ -59,7 +59,7 @@ func newLoadbalancers(client iaas.Client, config *Config) cloudprovider.LoadBala
 // GetLoadBalancer will not modify service.
 func (l *loadbalancers) GetLoadBalancer(ctx context.Context, clusterName string, service *v1.Service) (*v1.LoadBalancerStatus, bool, error) {
 
-	lbName := cloudprovider.GetLoadBalancerName(service)
+	lbName := l.GetLoadBalancerName(ctx, clusterName, service)
 	lb, err := l.lbByName(lbName)
 	if err != nil {
 		if err == errLBNotFound {
@@ -95,6 +95,13 @@ func (l *loadbalancers) GetLoadBalancer(ctx context.Context, clusterName string,
 	}, true, nil
 }
 
+// GetLoadBalancerName returns the name of the load balancer. Implementations must treat the
+// *v1.Service parameter as read-only and not modify it.
+func (l *loadbalancers) GetLoadBalancerName(ctx context.Context, clusterName string, service *v1.Service) string {
+	// TODO: replace DefaultLoadBalancerName to generate more meaningful loadbalancer names.
+	return cloudprovider.DefaultLoadBalancerName(service)
+}
+
 // EnsureLoadBalancer ensures that the cluster is running a load balancer for
 // service.
 //
@@ -123,7 +130,7 @@ func (l *loadbalancers) EnsureLoadBalancer(ctx context.Context, clusterName stri
 		lbTags = append(lbTags, serviceTag)
 
 		lbParam := &iaas.LoadBalancerParam{
-			Name:       cloudprovider.GetLoadBalancerName(service),
+			Name:       l.GetLoadBalancerName(ctx, clusterName, service),
 			Tags:       lbTags,
 			RouterTags: []string{TagsKubernetesResource},
 		}
@@ -177,7 +184,7 @@ func (l *loadbalancers) EnsureLoadBalancer(ctx context.Context, clusterName stri
 //
 // UpdateLoadBalancer will not modify service or nodes.
 func (l *loadbalancers) UpdateLoadBalancer(ctx context.Context, clusterName string, service *v1.Service, nodes []*v1.Node) error {
-	lbName := cloudprovider.GetLoadBalancerName(service)
+	lbName := l.GetLoadBalancerName(ctx, clusterName, service)
 	lb, err := l.lbByName(lbName)
 	if err != nil {
 		return err
@@ -198,7 +205,7 @@ func (l *loadbalancers) UpdateLoadBalancer(ctx context.Context, clusterName stri
 //
 // EnsureLoadBalancerDeleted will not modify service.
 func (l *loadbalancers) EnsureLoadBalancerDeleted(ctx context.Context, clusterName string, service *v1.Service) error {
-	lbName := cloudprovider.GetLoadBalancerName(service)
+	lbName := l.GetLoadBalancerName(ctx, clusterName, service)
 	lb, err := l.lbByName(lbName)
 	if err != nil {
 		if err == errLBNotFound {

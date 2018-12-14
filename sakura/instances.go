@@ -4,8 +4,11 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"net/http"
 	"strings"
+	"time"
 
+	"github.com/sacloud/libsacloud/api"
 	"github.com/sacloud/libsacloud/sacloud"
 	"github.com/sacloud/sakura-cloud-controller-manager/iaas"
 	"k8s.io/api/core/v1"
@@ -14,11 +17,17 @@ import (
 )
 
 type instances struct {
-	sacloudAPI iaas.Client
+	sacloudAPI   iaas.Client
+	shutdownWait time.Duration
 }
 
+const defaultServerShutdownWait = 30 * time.Second
+
 func newInstances(client iaas.Client) cloudprovider.Instances {
-	return &instances{sacloudAPI: client}
+	return &instances{
+		sacloudAPI:   client,
+		shutdownWait: defaultServerShutdownWait,
+	}
 }
 
 // NodeAddresses returns the addresses of the specified instance.
@@ -122,8 +131,26 @@ func (i *instances) InstanceExistsByProviderID(ctx context.Context, providerID s
 
 // InstanceShutdownByProviderID returns true if the instance is shutdown in cloudprovider
 func (i *instances) InstanceShutdownByProviderID(ctx context.Context, providerID string) (bool, error) {
-	// TODO not implements
-	return false, nil
+	serverID, err := serverIDFromProviderID(providerID)
+	if err != nil {
+		return false, err
+	}
+
+	server, err := nodeByID(i.sacloudAPI, serverID)
+	if err != nil {
+		if err, ok := err.(api.Error); ok {
+			if err.ResponseCode() == http.StatusNotFound {
+				return false, cloudprovider.InstanceNotFound
+			}
+		}
+		return false, err
+	}
+
+	if err := i.sacloudAPI.ShutdownServerByID(server.ID, i.shutdownWait); err != nil {
+		return false, err
+	}
+
+	return true, nil
 }
 
 // nodeByName gets a SAKURA Cloud Server instance by name. The returned error will
