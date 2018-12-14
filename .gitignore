@@ -3,3 +3,4 @@ bin/
 e2e/.terraform
 e2e/terraform.*
 e2e/id_rsa
+e2e/ccm.yaml
