@@ -55,6 +55,7 @@ type Client interface {
 	UpdateLoadBalancer(*sacloud.LoadBalancer, *VIPParam) ([]string, error)
 	DeleteLoadBalancer(id int64) error
 	Servers() ([]sacloud.Server, error)
+	ShutdownServerByID(id int64, shutdownWait time.Duration) error
 	CurrentZone() string
 }
 
