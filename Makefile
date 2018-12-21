@@ -3,6 +3,7 @@ GOFMT_FILES?=$$(find . -name '*.go' | grep -v vendor)
 BIN_NAME?=sakura-cloud-controller-manager
 CURRENT_VERSION = $(gobump show -r version/)
 GO_FILES?=$(shell find . -name '*.go')
+GO111MODULE=off
 
 BUILD_LDFLAGS = "-s -w \
 	  -X github.com/sacloud/sakura-cloud-controller-manager/version.Revision=`git rev-parse --short HEAD`"
