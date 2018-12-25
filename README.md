@@ -156,7 +156,7 @@ To see full manifests, see [examples/services/with-switch.yaml](examples/service
 
 - `k8s.usacloud.jp/router-selector`: (optional) Additional tags for finding upstream Router+Switch. Default is `[]`  
 This annotation only used when `k8s.usacloud.jp/load-balancer-type` is set to `internet`.  
-- `k8s.usacloud.jp/switch-selector`: (optional) Additional tags for finding upstream Router+Switch. Default is `[]`  
+- `k8s.usacloud.jp/switch-selector`: (optional) Additional tags for finding upstream Switch. Default is `[]`  
 This annotation only used when `k8s.usacloud.jp/load-balancer-type` is set to `switch`.  
 
 #### LoadBalancer's switched network settings
