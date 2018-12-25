@@ -1,6 +1,6 @@
 module "kubernetes" {
   source             = "./kubernetes"
-  kubernetes_version = "1.12.3"
+  kubernetes_version = "1.13.1"
 
   password              = "${var.password}"
   vpc_pre_shared_secret = "${var.pre_shared_secret}"

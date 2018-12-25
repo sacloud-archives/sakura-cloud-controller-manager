@@ -5,7 +5,7 @@ import (
 
 	"github.com/sacloud/sakura-cloud-controller-manager/iaas"
 	"k8s.io/apimachinery/pkg/types"
-	"k8s.io/kubernetes/pkg/cloudprovider"
+	"k8s.io/cloud-provider"
 )
 
 type zones struct {
