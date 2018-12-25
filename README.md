@@ -57,9 +57,9 @@ If you want to use service with `type: LoadBalancer`, the following settings are
 
 | Kubernetes | sakura-cloud-controller-manager | 
 | ------- | -------- |
-|  v1.9   |  v0.0.x  |
-|  v1.11  |  v0.1.x  |
-|  v1.12  |  v0.2.x  |
+|  v1.9   |  v0.0  |
+|  v1.11  |  v0.1  |
+|  v1.12  |  v0.2, v0.3  |
 
 ## Deploy
 
