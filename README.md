@@ -139,7 +139,7 @@ To see full manifests, see [examples/services/with-switch.yaml](examples/service
 ## Usage (others)
 
 - [Use loadBalancerIP example](examples/services/with-switch-loadBalancerIP.yaml)
-- [High-Availabilith LoadBalancer example](examples/services/with-switch-HA.yaml)
+- [High-Availability LoadBalancer example](examples/services/with-switch-HA.yaml)
 
 ## LoadBalancer Service Annotations
 
