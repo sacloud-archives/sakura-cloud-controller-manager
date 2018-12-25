@@ -2,13 +2,10 @@ package iaas
 
 import (
 	"errors"
-	"fmt"
 	"log"
 	"os"
 	"strconv"
 	"testing"
-
-	"github.com/sacloud/sakura-cloud-controller-manager/version"
 )
 
 var testClient *client
@@ -67,8 +64,6 @@ func TestMain(m *testing.M) {
 		panic(errors.New("Invalid client"))
 	}
 	testClient = tc
-
-	testClient.rawClient.UserAgent = fmt.Sprintf("sakura-cloud-controller-manager-test/v%s", version.Version)
 
 	ret := m.Run()
 	os.Exit(ret)

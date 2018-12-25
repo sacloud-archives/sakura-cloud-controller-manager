@@ -1,0 +1,50 @@
+# deployment
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    run: load-balancer-example2
+  name: load-balancer-example2
+  namespace: default
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      run: load-balancer-example2
+  template:
+    metadata:
+      labels:
+        run: load-balancer-example2
+    spec:
+      containers:
+        - image: gcr.io/google-samples/node-hello:1.0
+          imagePullPolicy: IfNotPresent
+          name: load-balancer-example2
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          resources: {}
+      restartPolicy: Always
+---
+# service
+apiVersion: v1
+kind: Service
+metadata:
+  name: load-balancer-example2
+  namespace: default
+  labels:
+    run: load-balancer-example2
+  annotations:
+    k8s.usacloud.jp/load-balancer-type: "switch"
+    k8s.usacloud.jp/load-balancer-ip-range: "10.240.0.0/16"
+    k8s.usacloud.jp/load-balancer-assign-ip-range: "10.240.100.0/24"
+    k8s.usacloud.jp/load-balancer-assign-default-gateway: "10.240.0.1"
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    run: load-balancer-example2
+  type: LoadBalancer
+  loadBalancerIP: 10.240.101.1
