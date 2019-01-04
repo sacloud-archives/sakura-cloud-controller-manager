@@ -169,7 +169,7 @@ There annotations are required when `k8s.usacloud.jp/load-balancer-type` is set 
 
 ## License
 
- `sakura-cloud-controller-manager` Copyright (C) 2018 Kazumichi Yamamoto.
+ `sakura-cloud-controller-manager` Copyright (C) 2018-2019 Kazumichi Yamamoto.
 
   This project is published under [Apache 2.0 License](LICENSE.txt).
   
