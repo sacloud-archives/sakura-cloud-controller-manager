@@ -3,13 +3,14 @@ package main
 import (
 	"fmt"
 	"math/rand"
+	"net/http"
 	"os"
 	"time"
 
 	_ "github.com/sacloud/sakura-cloud-controller-manager/sakura"
 	"github.com/sacloud/sakura-cloud-controller-manager/version"
 	"k8s.io/apiserver/pkg/server/healthz"
-	"k8s.io/apiserver/pkg/util/logs"
+	"k8s.io/component-base/logs"
 	"k8s.io/klog"
 	"k8s.io/kubernetes/cmd/cloud-controller-manager/app"
 	_ "k8s.io/kubernetes/pkg/client/metrics/prometheus" // for client metric registration
@@ -17,7 +18,7 @@ import (
 )
 
 func init() {
-	healthz.DefaultHealthz()
+	healthz.InstallHandler(http.DefaultServeMux)
 }
 
 func main() {
