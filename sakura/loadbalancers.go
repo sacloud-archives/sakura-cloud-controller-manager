@@ -10,7 +10,7 @@ import (
 	"github.com/sacloud/libsacloud/sacloud"
 	"github.com/sacloud/sakura-cloud-controller-manager/iaas"
 	"k8s.io/api/core/v1"
-	"k8s.io/kubernetes/pkg/cloudprovider"
+	"k8s.io/cloud-provider"
 	"k8s.io/kubernetes/pkg/util/strings"
 )
 
@@ -368,7 +368,7 @@ func (l *loadbalancers) buildVIPParams(service *v1.Service, nodes []*v1.Node, lb
 		//if port.Protocol == "TCP" {
 		//	hc.Protocol = "tcp"
 		//} else {
-		//	glog.Warningf("Protocol %q is not support for health-check, so we will use ping", port.Protocol)
+		//	klog.Warningf("Protocol %q is not support for health-check, so we will use ping", port.Protocol)
 		//}
 
 		// collect health check spec from annotations

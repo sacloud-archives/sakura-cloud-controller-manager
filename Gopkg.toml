@@ -11,11 +11,11 @@
 
 [[override]]
   name = "k8s.io/apiextensions-apiserver"
-  version = "kubernetes-1.12.3"
+  version = "kubernetes-1.13.1"
 
 [[override]]
   name = "k8s.io/client-go"
-  version = "kubernetes-1.12.3"
+  version = "kubernetes-1.13.1"
 
 [[override]]
   name = "github.com/json-iterator/go"
@@ -34,25 +34,29 @@
   name = "github.com/hashicorp/go-multierror"
 
 [[constraint]]
-  branch = "master"
-  name = "github.com/golang/glog"
-
-[[constraint]]
-  branch = "master"
-  name = "github.com/spf13/pflag"
-
-[[constraint]]
   name = "k8s.io/api"
-  version = "kubernetes-1.12.3"
+  version = "kubernetes-1.13.1"
 
 [[constraint]]
   name = "k8s.io/apimachinery"
-  version = "kubernetes-1.12.3"
+  version = "kubernetes-1.13.1"
 
 [[constraint]]
   name = "k8s.io/apiserver"
-  version = "kubernetes-1.12.3"
+  version = "kubernetes-1.13.1"
 
 [[constraint]]
   name = "k8s.io/kubernetes"
-  version = "1.12.3"
+  version = "1.13.1"
+
+[[override]]
+  name = "github.com/vmware/photon-controller-go-sdk"
+  revision = "4a435daef6ccd3d0edaac1161e76f51a70c2589a"
+
+[[override]]
+  name = "github.com/gophercloud/gophercloud"
+  revision = "781450b3c4fcb4f5182bcc5133adb4b2e4a09d1d"
+
+[[override]]
+  name = "github.com/Azure/azure-sdk-for-go"
+  revision = "da91af54816b4cf72949c225a2d0980f51fab01b"

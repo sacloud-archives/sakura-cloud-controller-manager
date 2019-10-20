@@ -5,8 +5,7 @@ import (
 	"io"
 
 	"github.com/sacloud/sakura-cloud-controller-manager/iaas"
-	"k8s.io/kubernetes/pkg/cloudprovider"
-	"k8s.io/kubernetes/pkg/controller"
+	"k8s.io/cloud-provider"
 )
 
 const (
@@ -76,7 +75,8 @@ func init() {
 
 // Initialize provides the cloud with a kubernetes client builder and may spawn goroutines
 // to perform housekeeping activities within the cloud provider.
-func (c *cloud) Initialize(clientBuilder controller.ControllerClientBuilder) {
+func (c *cloud) Initialize(clientBuilder cloudprovider.ControllerClientBuilder, stop <-chan struct{}) {
+	// TODO changed k8s 1.13
 }
 
 // LoadBalancer returns a balancer interface. Also returns true if the interface is supported, false otherwise.
