@@ -1,4 +1,4 @@
-FROM golang:1.11 AS builder
+FROM golang:1.13 AS builder
 MAINTAINER Kazumichi Yamamoto <yamamoto.febc@gmail.com>
 LABEL MAINTAINER 'Kazumichi Yamamoto <yamamoto.febc@gmail.com>'
 
@@ -16,7 +16,7 @@ RUN ["make","clean","build"]
 
 #----------
 
-FROM alpine:3.7
+FROM alpine:3.10
 MAINTAINER Kazumichi Yamamoto <yamamoto.febc@gmail.com>
 LABEL MAINTAINER 'Kazumichi Yamamoto <yamamoto.febc@gmail.com>'
 
