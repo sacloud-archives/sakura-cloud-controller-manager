@@ -16,11 +16,9 @@ RUN ["make","clean","build"]
 
 #----------
 
-FROM alpine:3.10
-MAINTAINER Kazumichi Yamamoto <yamamoto.febc@gmail.com>
+FROM gcr.io/distroless/static:latest
 LABEL MAINTAINER 'Kazumichi Yamamoto <yamamoto.febc@gmail.com>'
-
-RUN set -x && apk add --no-cache --update ca-certificates
-COPY --from=builder /go/src/github.com/sacloud/sakura-cloud-controller-manager/bin/sakura-cloud-controller-manager /usr/local/bin/
-RUN chmod +x /usr/local/bin/sakura-cloud-controller-manager
-ENTRYPOINT ["/usr/local/bin/sakura-cloud-controller-manager"]
+WORKDIR /
+COPY --from=builder /go/src/github.com/sacloud/sakura-cloud-controller-manager/bin/sakura-cloud-controller-manager .
+USER nobody
+ENTRYPOINT ["/sakura-cloud-controller-manager"]
