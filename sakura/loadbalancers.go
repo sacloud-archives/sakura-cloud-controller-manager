@@ -11,7 +11,7 @@ import (
 	"github.com/sacloud/sakura-cloud-controller-manager/iaas"
 	"k8s.io/api/core/v1"
 	"k8s.io/cloud-provider"
-	"k8s.io/kubernetes/pkg/util/strings"
+	"k8s.io/utils/strings"
 )
 
 // TagsLoadBalancerServiceName is tag name indicating that resource is part of k8s cluster service
