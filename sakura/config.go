@@ -13,13 +13,14 @@ import (
 
 // Config represents CCM configuration includes sacloud API client configuration
 type Config struct {
-	AccessToken       string `json:"accessToken" yaml:"accessToken" split_words:"true"`
-	AccessTokenSecret string `json:"accessTokenSecret" yaml:"accessTokenSecret" split_words:"true"`
-	Zone              string `json:"zone" yaml:"zone" split_words:"true"`
-	RetryMax          int    `json:"retryMax" yaml:"retryMax" split_words:"true"`
-	RetryIntervalSec  int    `json:"retryIntervalSec" yaml:"retryIntervalSec" split_words:"true"`
-	APIRootURL        string `json:"apiRootURL" yaml:"apiRootURL" split_words:"true"`
-	TraceMode         bool   `json:"traceMode" yaml:"traceMode" split_words:"true"`
+	AccessToken         string `json:"accessToken" yaml:"accessToken" split_words:"true"`
+	AccessTokenSecret   string `json:"accessTokenSecret" yaml:"accessTokenSecret" split_words:"true"`
+	Zone                string `json:"zone" yaml:"zone" split_words:"true"`
+	RetryMax            int    `json:"retryMax" yaml:"retryMax" split_words:"true"`
+	RetryIntervalSec    int    `json:"retryIntervalSec" yaml:"retryIntervalSec" split_words:"true"`
+	APIRootURL          string `json:"apiRootURL" yaml:"apiRootURL" split_words:"true"`
+	TraceMode           bool   `json:"traceMode" yaml:"traceMode" split_words:"true"`
+	DisableLoadBalancer bool   `json:"disableLoadBalancer" yaml:"disableLoadBalancer" split_words:"true"`
 
 	ClusterID string `json:"clusterID" yaml:"clusterID" split_words:"true"`
 }
