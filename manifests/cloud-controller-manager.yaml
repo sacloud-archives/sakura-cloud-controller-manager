@@ -15,6 +15,13 @@ rules:
   - apiGroups:
       - ""
     resources:
+      - serviceaccounts
+    verbs:
+      - get
+      - create
+  - apiGroups:
+      - ""
+    resources:
       - configmaps
     verbs:
       - get
@@ -129,12 +136,12 @@ spec:
       serviceAccountName: cloud-controller-manager
       containers:
         - name: sakura-cloud-controller-manager
-          image: sacloud/sakura-cloud-controller-manager:0.4.1
+          image: sacloud/sakura-cloud-controller-manager:0.4.2
           command:
             - /sakura-cloud-controller-manager
             - --cloud-provider=sakuracloud
             - --leader-elect=true
-            - --use-service-account-credentials=false
+            - --use-service-account-credentials=true
             - --allocate-node-cidrs=false
             - --configure-cloud-routes=false
           env:
