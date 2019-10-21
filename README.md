@@ -96,7 +96,7 @@ EOF
 ### Deploy `sakura-cloud-controller-manager` 
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/sacloud/sakura-cloud-controller-manager/0.4.0/manifests/cloud-controller-manager.yaml
+kubectl apply -f https://raw.githubusercontent.com/sacloud/sakura-cloud-controller-manager/0.4.1/manifests/cloud-controller-manager.yaml
 ```
 
 ## Usage (with Router+Switch)
