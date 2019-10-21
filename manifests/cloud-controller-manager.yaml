@@ -1,0 +1,165 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: cloud-controller-manager
+  namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    rbac.authorization.kubernetes.io/autoupdate: "true"
+  name: system:cloud-controller-manager
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+      - delete
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps/status
+    verbs:
+      - get
+      - update
+      - patch
+  - apiGroups:
+      - ""
+    resources:
+      - events
+    verbs:
+      - create
+      - patch
+      - update
+  - apiGroups:
+      - ""
+    resources:
+      - nodes
+    verbs:
+      - '*'
+  - apiGroups:
+      - ""
+    resources:
+      - nodes/status
+    verbs:
+      - patch
+  - apiGroups:
+      - ""
+    resources:
+      - services
+    verbs:
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - services/status
+    verbs:
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - endpoints
+    verbs:
+      - create
+      - get
+      - list
+      - watch
+      - update
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    verbs:
+      - create
+      - get
+      - list
+      - patch
+      - watch
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: system:cloud-controller-manager
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: system:cloud-controller-manager
+subjects:
+  - kind: ServiceAccount
+    name: cloud-controller-manager
+    namespace: kube-system
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: sakura-cloud-controller-manager
+  name: sakura-cloud-controller-manager
+  namespace: kube-system
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: sakura-cloud-controller-manager
+  template:
+    metadata:
+      labels:
+        app: sakura-cloud-controller-manager
+      annotations:
+        scheduler.alpha.kubernetes.io/critical-pod: ''
+    spec:
+      dnsPolicy: Default
+      hostNetwork: true
+      serviceAccountName: cloud-controller-manager
+      containers:
+        - name: sakura-cloud-controller-manager
+          image: sacloud/sakura-cloud-controller-manager:0.4.0
+          command:
+            - /sakura-cloud-controller-manager
+            - --cloud-provider=sakuracloud
+            - --leader-elect=true
+            - --use-service-account-credentials=false
+            - --allocate-node-cidrs=false
+            - --configure-cloud-routes=false
+          env:
+            - name: SAKURACLOUD_ACCESS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: token
+                  name: ccm-api-token
+            - name: SAKURACLOUD_ACCESS_TOKEN_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: secret
+                  name: ccm-api-token
+            - name: SAKURACLOUD_ZONE
+              valueFrom:
+                secretKeyRef:
+                  key: zone
+                  name: ccm-api-token
+            - name: SAKURACLOUD_CLUSTER_ID
+              value: "default" # TODO set your cluster ID
+      tolerations:
+        - key: node.cloudprovider.kubernetes.io/uninitialized
+          value: "true"
+          effect: NoSchedule
+        - key: "CriticalAddonsOnly"
+          operator: "Exists"
+        - key: node-role.kubernetes.io/master
+          effect: NoSchedule

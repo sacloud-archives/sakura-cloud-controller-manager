@@ -57,9 +57,10 @@ If you want to use service with `type: LoadBalancer`, the following settings are
 
 | Kubernetes | sakura-cloud-controller-manager | 
 | ------- | -------- |
-|  v1.9   |  v0.0  |
-|  v1.11  |  v0.1  |
-|  v1.12  |  v0.2, v0.3  |
+|  v1.13  |  v0.3, v0.4+  |
+|  v1.14  |  v0.4+  |
+|  v1.15  |  v0.4+  |
+|  v1.16  |  v0.4+  |
 
 ## Deploy
 
@@ -68,20 +69,35 @@ If you want to use service with `type: LoadBalancer`, the following settings are
 To running `sakura-cloud-controller-manager`, you need SAKURA Cloud API Key.  
 Please create API Key from [Control Panel](https://secure.sakura.ad.jp/cloud/) if you haven't it.
 
-### Run `sakura-cloud-controller-manager` container
+Then, create the Secret resource by followings:
 
-There are two ways to run `sakura-cloud-controller-manager`
+```bash
+# set API keys to env
+export SAKURACLOUD_ACCESS_TOKEN=<your-token>
+export SAKURACLOUD_ACCESS_TOKEN_SECRET=<your-secret>
+export SAKURACLOUD_ZONE=<your-zone> # is1a or is1b or tk1a
 
-- using `helm` 
-- manually settting up
+# create Secret resource
+cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ccm-api-token
+  namespace: kube-system
+type: Opaque
+data:
+  token: '$(echo -n $SAKURACLOUD_ACCESS_TOKEN | base64)'
+  secret: '$(echo -n $SAKURACLOUD_ACCESS_TOKEN_SECRET | base64)'
+  zone: '$(echo -n $SAKURACLOUD_ZONE | base64)'
+EOF
 
-### Using `helm`
+```
 
-To deploy by helm, see [sacloud/helm-charts/sakura-cloud-controller-mammager](https://github.com/sacloud/helm-charts/blob/master/sakura-cloud-controller-manager/README.md)
+### Deploy `sakura-cloud-controller-manager` 
 
-### Manually 
-
-[TODO add documents]
+```bash
+kubectl apply -f https://raw.githubusercontent.com/sacloud/sakura-cloud-controller-manager/0.4.0/manifests/cloud-controller-manager.yaml
+```
 
 ## Usage (with Router+Switch)
 
