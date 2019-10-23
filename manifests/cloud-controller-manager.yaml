@@ -15,13 +15,6 @@ rules:
   - apiGroups:
       - ""
     resources:
-      - serviceaccounts
-    verbs:
-      - get
-      - create
-  - apiGroups:
-      - ""
-    resources:
       - configmaps
     verbs:
       - get
@@ -77,6 +70,16 @@ rules:
       - patch
       - update
       - watch
+  - apiGroups:
+      - ""
+    resources:
+      - serviceaccounts
+    verbs:
+      - create
+      - get
+      - list
+      - watch
+      - update
   - apiGroups:
       - ""
     resources:
