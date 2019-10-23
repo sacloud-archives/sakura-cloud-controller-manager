@@ -146,11 +146,7 @@ func (i *instances) InstanceShutdownByProviderID(ctx context.Context, providerID
 		return false, err
 	}
 
-	if err := i.sacloudAPI.ShutdownServerByID(server.ID, i.shutdownWait); err != nil {
-		return false, err
-	}
-
-	return true, nil
+	return server.IsUp(), nil
 }
 
 // nodeByName gets a SAKURA Cloud Server instance by name. The returned error will
