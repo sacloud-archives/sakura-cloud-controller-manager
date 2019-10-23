@@ -139,7 +139,7 @@ spec:
       serviceAccountName: cloud-controller-manager
       containers:
         - name: sakura-cloud-controller-manager
-          image: sacloud/sakura-cloud-controller-manager:0.4.2
+          image: sacloud/sakura-cloud-controller-manager:0.4.3
           command:
             - /sakura-cloud-controller-manager
             - --cloud-provider=sakuracloud
